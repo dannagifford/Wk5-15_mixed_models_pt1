@@ -34,15 +34,15 @@ age_height_data %>%
 
 # Linear mixed models
 # Create mixed_model_data - 10 subject, 10 items, 2 conditions, with 4 repeats
-# just to create a totally ficitious data set that allows the models to be built
+# just to create a totally fictitious data set that allows the models to be built
 # We use set.seed() to ensure the random numbers in rt can be reproduced
 subject <- factor(c(rep(1:10, each = 5), rep(1:10, each = 5)))
 condition <- factor(c(rep("small", times = 50), rep("large", times = 50)))
 item <- factor(rep(seq(1:5), times = 20))
 set.seed(9999)
-rt1 <- as.integer(rnorm(50, 800, 25))
+rt1 <- as.integer(rnorm(50, 800, 100))
 set.seed(1234)
-rt2 <- as.integer(rnorm(50, 1200, 25))
+rt2 <- as.integer(rnorm(50, 900, 100))
 rt <- c(rt1, rt2)
 
 mixed_model_data <- tibble(subject, item, condition, rt)
@@ -78,9 +78,43 @@ mixed_model_slopes <- lmer(rt ~ condition + (1 + condition | subject)
 subject_intercepts <- coef(mixed_model_slopes)$subject[1]
 subject_slopes <- coef(mixed_model_slopes)$subject[2]
 
-subject_coefs <- tibble(subject = seq(1:10), 
-                        large = subject_intercepts, 
-                        small = subject_intercepts + subject_slopes)
+subject_coefs <- tibble(subject = c(seq(1:10), seq(1:10)),  
+                        condition = c(rep("large", times = 10), 
+                                      rep("small", times = 10)),
+                        rt = unlist(rbind(subject_intercepts, 
+                                   (subject_intercepts + subject_slopes))))
 
 subject_coefs %>%
+  ggplot(aes(x = condition, y = rt, group = subject, label = subject)) +
+  geom_point() + 
+  geom_line() +
+  geom_text(check_overlap = TRUE, nudge_x = .05)
   
+subject_coefs %>%
+  filter(subject == "1" | subject == "3") %>%
+  ggplot(aes(x = condition, y = rt, group = subject, label = subject)) +
+  geom_point() + 
+  geom_line() +
+  geom_text(check_overlap = TRUE, nudge_x = .05)
+
+item_intercepts <- coef(mixed_model_slopes)$item[1]
+item_slopes <- coef(mixed_model_slopes)$item[2]
+
+item_coefs <- tibble(item = c(seq(1:5), seq(1:5)),  
+                        condition = c(rep("large", times = 5), 
+                                      rep("small", times = 5)),
+                        rt = unlist(rbind(item_intercepts, 
+                                          (item_intercepts + item_slopes))))
+
+item_coefs %>%
+  ggplot(aes(x = condition, y = rt, group = item, label = item)) +
+  geom_point() + 
+  geom_line() +
+  geom_text(check_overlap = TRUE, nudge_x = .05)
+
+item_coefs %>%
+  filter(item == "2" | item == "5") %>%
+  ggplot(aes(x = condition, y = rt, group = item, label = item)) +
+  geom_point() + 
+  geom_line() +
+  geom_text(check_overlap = TRUE, nudge_x = .05)
