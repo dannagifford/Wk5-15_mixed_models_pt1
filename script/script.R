@@ -131,3 +131,6 @@ item_coefs %>%
   geom_line(data = filter(item_coefs, item == "1" | item == "3")) +
   geom_text(data = filter(item_coefs, item == "1" | item == "3"), 
             check_overlap = TRUE, nudge_x = .05)
+
+# 2 x 2 factorial design
+
