@@ -2,6 +2,7 @@ library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(emmeans)
+library(performance)
 
 # Is height predicted by gender?
 # Create gender_height_data
@@ -71,6 +72,8 @@ coef(mixed_model)
 mixed_model_slopes <- lmer(rt ~ condition + (1 + condition | subject)
                            + (1 + condition | item), data = mixed_model_data)
 
+check_model(mixed_model_slopes)
+
 # Let's plot the intercepts and slopes where the intercept corresponds to 
 # the large condition level, and the slope is the difference between it and
 # the small condition level
@@ -133,6 +136,33 @@ item_coefs %>%
             check_overlap = TRUE, nudge_x = .05)
 
 # 1 factorial mixed model
-
+# first read in the data
 factor_1 <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/factor_1.csv")
 
+tidied_factor_1_data <- factor_1 %>% 
+  transmute(subject = factor(Subject), item = factor(Item), 
+            condition = factor(Condition), gaze = Gaze)
+
+str(tidied_factor_1_data)
+
+tidied_factor_1_data %>%
+  ggplot(aes(x = condition, y = gaze, colour = condition)) +
+  geom_violin(width = .5) +
+  geom_jitter(width = .1, alpha = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  theme_minimal() +
+  labs(x = "Condition",
+       y = "Gaze Duration (ms.)") +
+  guides(colour = FALSE) +
+  coord_flip()
+
+factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
+                         (1 + condition | item), data = tidied_factor_1_data) 
+
+factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
+                         (1 | item), data = tidied_factor_1_data) 
+
+factor_1_model <- lmer(gaze ~ condition + (1 | subject) + (1 | item), 
+                       data = tidied_factor_1_data) 
+
+check_model(factor_1_model)
