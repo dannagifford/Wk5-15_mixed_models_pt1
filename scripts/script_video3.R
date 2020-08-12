@@ -1,3 +1,9 @@
+library(tidyverse)
+library(lme4) # mixed models package
+library(lmerTest) # approximate p-values in mixed models
+library(emmeans) # allow us to run follow up tests
+library(performance) # check model assumptions
+library(arm) # for binned residuals plot
 
 # Let's look at some binomial data
 regressions_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/regressions.csv")
