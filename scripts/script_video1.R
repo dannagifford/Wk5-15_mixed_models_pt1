@@ -1,8 +1,9 @@
 library(tidyverse)
-library(lme4)
-library(lmerTest)
-library(emmeans)
-library(performance)
+library(lme4) # mixed models package
+library(lmerTest) # approximate p-values in mixed models
+library(emmeans) # allow us to run follow up tests
+library(performance) # check model assumptions
+library(arm) # for binned residuals plot
 
 # Is height predicted by gender?
 # Create gender_height_data
@@ -10,6 +11,8 @@ subject <- seq(1:8)
 gender <- factor(c(rep("male", 4), rep("female", 4)))
 height <- c(170, 180, 175, 185, 160, 170, 165, 165)
 gender_height_data <- tibble(subject, gender, height)
+
+write_csv(gender_height_data, "data/gender_height_data.csv")
 
 # fit a linear model where gender is used to predict height
 height_model <- lm(height ~ gender, data = gender_height_data)
@@ -24,6 +27,8 @@ gender_height_data %>%
 # Create age_height_data
 age <- c(22, 21, 19, 23, 15, 17, 16, 17)
 age_height_data <- tibble(subject, age, height)
+
+write_csv(age_height_data, "data/age_height_data.csv")
 
 age_model <- lm(height ~ age, data = age_height_data)
 summary(age_model)
