@@ -29,11 +29,33 @@ tidied_factorial_data %>%
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE) +
   labs(x = "Sentence X Context",
-       y = "RT (ms.") +
+       y = "RT (ms.)") +
   theme_minimal() +
   coord_flip()
 
+contrasts(tidied_factorial_data$context) <- matrix(c(.5, -.5))
+contrasts(tidied_factorial_data$sentence) <- matrix(c(.5, -.5))
 
+factorial_model <- lmer(RT ~ context * sentence + 
+                          (1 + context * sentence | subject) +
+                          (1 + context * sentence | item), 
+                        data = tidied_factorial_data)
+
+check_model(factorial_model)
+
+confint(factorial_model)
+
+emmeans(factorial_model, pairwise ~ context*sentence, adjust = "none")
+
+factorial_model_gamma <- glmer(RT ~ context * sentence + 
+                                 (1 | subject) +
+                                 (1 | item), 
+                               data = tidied_factorial_data,
+                               family = Gamma)
+
+check_model(factorial_model_gamma)
+
+summary(factorial_model_gamma)
 
 # Let's look at some binomial data
 regressions_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/regressions.csv")
