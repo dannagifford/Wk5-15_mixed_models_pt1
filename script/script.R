@@ -94,10 +94,10 @@ subject_coefs %>%
 # between conditions looks pretty smaall compared to the difference for 
 # subject 3
 subject_coefs %>%
-  filter(subject == "1" | subject == "3") %>%
   ggplot(aes(x = condition, y = rt, group = subject, label = subject)) +
-  geom_point() + 
-  geom_line() +
+  geom_point(colour = "grey") + 
+  geom_line(colour = "grey") +
+  geom_line(data = filter(subject_coefs, subject == "1" | subject == "3")) +
   geom_text(check_overlap = TRUE, nudge_x = .05)
 
 # Now let's extract and plot the item intercepts and slopes
@@ -120,8 +120,8 @@ item_coefs %>%
 # the `small` condition are pretty much the same - but for the `large` condition
 # item 1 is about 25 ms. slower than for item 3
 item_coefs %>%
-  filter(item == "1" | item == "3") %>%
   ggplot(aes(x = condition, y = rt, group = item, label = item)) +
-  geom_point() + 
-  geom_line() +
+  geom_point(colour = "grey") + 
+  geom_line(colour = "grey") +
+  geom_line(data = filter(item_coefs, item == "1" | item == "3")) +
   geom_text(check_overlap = TRUE, nudge_x = .05)
