@@ -39,13 +39,23 @@ subject <- factor(c(rep(1:10, each = 5), rep(1:10, each = 5)))
 condition <- factor(c(rep("small", times = 50), rep("large", times = 50)))
 item <- factor(rep(seq(1:5), times = 20))
 set.seed(9999)
-rt1 <- as.integer(rnorm(50, 800, 200))
-set.seed(1235)
-rt2 <- as.integer(rnorm(50, 1000, 100))
+rt1 <- as.integer(rnorm(50, 800, 25))
+set.seed(1234)
+rt2 <- as.integer(rnorm(50, 1200, 25))
 rt <- c(rt1, rt2)
 
+mixed_model_data1 <- tibble(subject, item, condition, rt)
 
-mixed_model_data <- tibble(subject, item, condition, rt)
+set.seed(1111)
+rt1 <- as.integer(rnorm(50, 800, 25))
+set.seed(1233)
+rt2 <- as.integer(rnorm(50, 1200, 25))
+rt <- c(rt1, rt2)
+
+mixed_model_data2 <- tibble(subject, item, condition, rt)
+
+mixed_model_data <- rbind(mixed_model_data1, mixed_model_data2)
+
 
 mixed_model_data %>% 
   group_by(condition) %>%
