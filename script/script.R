@@ -158,11 +158,18 @@ tidied_factor_1_data %>%
 
 factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
                          (1 + condition | item), data = tidied_factor_1_data) 
+# Need to simplify due to singular fit warning
 
 factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
                          (1 | item), data = tidied_factor_1_data) 
+# Need to simplify due to singular fit warning
 
 factor_1_model <- lmer(gaze ~ condition + (1 | subject) + (1 | item), 
                        data = tidied_factor_1_data) 
 
 check_model(factor_1_model)
+
+factor_1_model_null <- lmer(gaze ~ (1 | subject) + (1 | item), 
+                            data = tidied_factor_1_data) 
+
+anova(factor_1_model, factor_1_model_null)
