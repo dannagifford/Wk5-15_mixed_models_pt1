@@ -173,3 +173,11 @@ factor_1_model_null <- lmer(gaze ~ (1 | subject) + (1 | item),
                             data = tidied_factor_1_data) 
 
 anova(factor_1_model, factor_1_model_null)
+
+emmeans(factor_1_model, pairwise ~ condition)
+
+confint(factor_1_model, parm = (Intercept))
+
+tidied_factor_1_data %>%
+  group_by(condition) %>%
+  summarise(mean_gaze = mean(gaze), sd_gaze = sd(gaze))
