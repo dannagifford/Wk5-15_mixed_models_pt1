@@ -132,5 +132,7 @@ item_coefs %>%
   geom_text(data = filter(item_coefs, item == "1" | item == "3"), 
             check_overlap = TRUE, nudge_x = .05)
 
-# 2 x 2 factorial design
+# 1 factorial mixed model
+
+factor_1 <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/factor_1.csv")
 
