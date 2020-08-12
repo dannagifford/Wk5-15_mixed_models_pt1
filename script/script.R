@@ -33,7 +33,8 @@ age_height_data %>%
   geom_smooth(method = "lm", se = FALSE)
 
 # Linear mixed models
-# Create mixed_model_data
+# Create mixed_model_data - 10 subject, 10 items, 2 conditions, with 4 repeats
+# just to create a totally ficitious data set that allows the models to be built
 # We use set.seed() to ensure the random numbers in rt can be reproduced
 subject <- factor(c(rep(1:10, each = 5), rep(1:10, each = 5)))
 condition <- factor(c(rep("small", times = 50), rep("large", times = 50)))
@@ -44,18 +45,10 @@ set.seed(1234)
 rt2 <- as.integer(rnorm(50, 1200, 25))
 rt <- c(rt1, rt2)
 
-mixed_model_data1 <- tibble(subject, item, condition, rt)
+mixed_model_data <- tibble(subject, item, condition, rt)
 
-set.seed(1111)
-rt1 <- as.integer(rnorm(50, 800, 25))
-set.seed(1233)
-rt2 <- as.integer(rnorm(50, 1200, 25))
-rt <- c(rt1, rt2)
-
-mixed_model_data2 <- tibble(subject, item, condition, rt)
-
-mixed_model_data <- rbind(mixed_model_data1, mixed_model_data2)
-
+mixed_model_data <- rbind(mixed_model_data, mixed_model_data, 
+                          mixed_model_data, mixed_model_data)
 
 mixed_model_data %>% 
   group_by(condition) %>%
@@ -77,3 +70,17 @@ coef(mixed_model)
 # Let's now add slopes for our two random effects
 mixed_model_slopes <- lmer(rt ~ condition + (1 + condition | subject)
                            + (1 + condition | item), data = mixed_model_data)
+
+# Let's plot the intercepts and slopes where the intercept corresponds to 
+# the large condition level, and the slope is the difference between it and
+# the small condition level
+# First by subjects
+subject_intercepts <- coef(mixed_model_slopes)$subject[1]
+subject_slopes <- coef(mixed_model_slopes)$subject[2]
+
+subject_coefs <- tibble(subject = seq(1:10), 
+                        large = subject_intercepts, 
+                        small = subject_intercepts + subject_slopes)
+
+subject_coefs %>%
+  
