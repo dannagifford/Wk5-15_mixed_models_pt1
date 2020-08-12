@@ -1,8 +1,9 @@
 library(tidyverse)
-library(lme4)
-library(lmerTest)
-library(emmeans)
-library(performance)
+library(lme4) # mixed models package
+library(lmerTest) # approximate p-values in mixed models
+library(emmeans) # allow us to run follow up tests
+library(performance) # check model assumptions
+library(arm) # for binned residuals plot
 
 # Let's look at a 2 x 2 design
 
@@ -37,3 +38,5 @@ binomial_model_null <- glmer(DV ~ (1 | subject),
                         family = binomial)
 
 anova(binomial_model, binomial_model_null)
+
+binnedplot(fitted(binomial_model), resid(binomial_model,type="response"))
