@@ -40,7 +40,12 @@ factorial_model <- lmer(RT ~ context * sentence +
                           (1 + context * sentence | item), 
                         data = tidied_factorial_data)
 
-#### ADD FUNCTION TO SIMPLIFY MODEL ####
+# Simplify model
+
+factorial_model <- lmer(RT ~ context * sentence + 
+                          (1 + context + sentence | subject) +
+                          (1 + context * sentence | item), 
+                        data = tidied_factorial_data)
 
 check_model(factorial_model)
 
