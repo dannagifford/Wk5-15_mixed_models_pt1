@@ -41,6 +41,8 @@ factorial_model <- lmer(RT ~ context * sentence +
                           (1 + context * sentence | item), 
                         data = tidied_factorial_data)
 
+#### ADD FUNCTION TO SIMPLIFY MODEL ####
+
 check_model(factorial_model)
 
 confint(factorial_model)
