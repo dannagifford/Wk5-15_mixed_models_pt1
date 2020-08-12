@@ -49,6 +49,8 @@ factorial_model <- lmer(RT ~ context * sentence +
 
 check_model(factorial_model)
 
+summary(factorial_model)
+
 confint(factorial_model)
 
 emmeans(factorial_model, pairwise ~ context*sentence, adjust = "none")
