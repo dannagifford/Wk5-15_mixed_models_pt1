@@ -97,8 +97,11 @@ subject_coefs %>%
   ggplot(aes(x = condition, y = rt, group = subject, label = subject)) +
   geom_point(colour = "grey") + 
   geom_line(colour = "grey") +
+  geom_text(check_overlap = TRUE, nudge_x = .05, colour = "grey") +
+  geom_point(data = filter(subject_coefs, subject == "1" | subject == "3")) +
   geom_line(data = filter(subject_coefs, subject == "1" | subject == "3")) +
-  geom_text(check_overlap = TRUE, nudge_x = .05)
+  geom_text(data = filter(subject_coefs, subject == "1" | subject == "3"), 
+            check_overlap = TRUE, nudge_x = .05)
 
 # Now let's extract and plot the item intercepts and slopes
 item_intercepts <- coef(mixed_model_slopes)$item[1]
@@ -123,5 +126,8 @@ item_coefs %>%
   ggplot(aes(x = condition, y = rt, group = item, label = item)) +
   geom_point(colour = "grey") + 
   geom_line(colour = "grey") +
+  geom_text(check_overlap = TRUE, nudge_x = .05, colour = "grey") +
+  geom_point(data = filter(item_coefs, item == "1" | item == "3")) +
   geom_line(data = filter(item_coefs, item == "1" | item == "3")) +
-  geom_text(check_overlap = TRUE, nudge_x = .05)
+  geom_text(data = filter(item_coefs, item == "1" | item == "3"), 
+            check_overlap = TRUE, nudge_x = .05)
