@@ -14,6 +14,12 @@ gender_height_data <- tibble(subject, gender, height)
 
 write_csv(gender_height_data, "data/gender_height_data.csv")
 
+gender_height_data %>%
+  ggplot(aes(x = gender, y = height)) +
+  geom_jitter(width = .1) +
+  theme_minimal() +
+  labs(x = "Gender", y = "Height (cm)")
+
 # fit a linear model where gender is used to predict height
 height_model <- lm(height ~ gender, data = gender_height_data)
 summary(height_model)
