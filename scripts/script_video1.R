@@ -14,20 +14,26 @@ gender_height_data <- tibble(subject, gender, height)
 
 write_csv(gender_height_data, "data/gender_height_data.csv")
 
+set.seed(1234)
 gender_height_data %>%
   ggplot(aes(x = gender, y = height)) +
   geom_jitter(width = .1) +
   theme_minimal() +
-  labs(x = "Gender", y = "Height (cm)")
+  labs(x = "Gender", y = "Height (cm)") +
+  scale_x_discrete(labels = c("Female", "Male"))
 
 # fit a linear model where gender is used to predict height
 height_model <- lm(height ~ gender, data = gender_height_data)
 summary(height_model)
 
+set.seed(1234)
 gender_height_data %>%
   ggplot(aes(x = gender, y = height, group = 1)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_jitter(width = .1) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(x = "Gender", y = "Height (cm)") +
+  scale_x_discrete(labels = c("Female", "Male"))
 
 # Is height predicted by age?
 # Create age_height_data
@@ -42,7 +48,9 @@ summary(age_model)
 age_height_data %>%
   ggplot(aes(x = age, y = height)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  #geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(x = "Age (years)", y = "Height (cm)")
 
 # Linear mixed models
 # Create mixed_model_data - 10 subject, 10 items, 2 conditions, with 4 repeats
@@ -179,6 +187,7 @@ factor_1_model <- lmer(gaze ~ condition + (1 | subject) + (1 | item),
                        data = tidied_factor_1_data) 
 
 check_model(factor_1_model)
+summary(factor_1_model)
 
 factor_1_model_null <- lmer(gaze ~ (1 | subject) + (1 | item), 
                             data = tidied_factor_1_data) 
