@@ -1,5 +1,5 @@
 ---
-title: "Linear Mixed Models Part 1"
+title: "Mixed Models Part 1"
 author: ""
 date: ""
 output: 
@@ -19,6 +19,69 @@ In this workshop we will take our first look at (generalised) linear mixed model
 
 [video 1 here]
 
+Once you've watched the video above, run the code below on your own machines.
+
+## Linear Models Recap
+### Predicting Height From Gender
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+We first read in the datafile we need.
+
+```{r, message=FALSE}
+gender_height_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/gender_height_data.csv")
+```
+
+Now let's plot our data. It's really important to do this before you build any models. You need to make sure the data look as you expect, and if you're trying to fit a linear model to your data it's important to be sure the relationship between your variables is roughly linear. Note, I've added a little bit of jitter to avoid overplotting.
+
+```{r}
+set.seed(1234)
+gender_height_data %>%
+  ggplot(aes(x = gender, y = height)) +
+  geom_jitter(width = .1) +
+  theme_minimal() +
+  labs(x = "Gender", y = "Height (cm)") +
+  scale_x_discrete(labels = c("Female", "Male"))
+```
+
+Now let's build a linear model using the `lm()` function and look at the parameter estimates using `summary()`.
+
+```{r}
+height_model <- lm(height ~ gender, data = gender_height_data)
+summary(height_model)
+```
+
+We can see from this output that the mean height of our Females is 165 cm - this corresponds to the intercept of our model. To calculate the mean height of our Males, we add 12.5cm to our intercept of 165 (giving us 177.5 cm). We see from the t-test that the difference between these two groups is significant (*p* = 0.017).
+
+### Predicting Height From Age 
+
+Now let's look at a case where we have two continuous variables.
+
+```{r, message=FALSE}
+age_height_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/age_height_data.csv")
+```
+
+Let's plot our data.
+
+```{r}
+age_height_data %>%
+  ggplot(aes(x = age, y = height)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Age (years)", y = "Height (cm)")
+```
+
+The plot suggests there's a linear relaionship between our two variables. Let's build a linear model and examine the parameter estimates.
+
+```{r}
+age_model <- lm(height ~ age, data = age_height_data)
+summary(age_model)
+```
+
+We can see that age is a significant predictor (*p* = .007). We interpret the parameter estimates slighly differently with continuous predictors compared to how we interpreted them when our predictor was categorical (as in the previous example). The intercept corresponds to someone's height when they are zero years old - which obviously makes no sense in this case. The model we've built really only captures the linear relationship between height and age for the age ranges we have data for. The relationship between height and age across the lifespan is obviously not linear! The estimate for age (2.398) should be interpreted as the increase in someone's height for every one year. So, for our dataset people tend to grow 2.398 cm per year.
+
 For a further gentle introduction to (G)LMMs I recommend you have a look at these two great tutorial papers by Bodo Winter. Just click on the images below to access them.
 
 &nbsp;&nbsp;
@@ -35,7 +98,14 @@ http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial1.pdf
 
 http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial2.pdf
 
-## LMMs for a One Factor Design
+## One Factor Design
+
+In this next video I'll show you how we might build a LMM to model data from a one factor design with three levels.
+
+[video 2]
+
+Once you've watched the video, run the code below on your own machines. 
+
 
 ## Improve this Workshop
 
