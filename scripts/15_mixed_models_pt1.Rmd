@@ -174,7 +174,7 @@ library(performance)
 check_model(mixed_model_slopes)
 ```
 
-## One Factor With Three Levels
+### One Factor With Three Levels
 
 In this next video, I'll show you how to build a mixed model for a design where you have one experimental factor with three levels.
 
@@ -182,19 +182,17 @@ In this next video, I'll show you how to build a mixed model for a design where 
 
 Once you've watched the video, run the code below on your own machines. 
 
-### One Factor Design With Three Levels
-
 Imagine we measured 24 subjects’ gaze duration while reading a sentence that appeared in one of three conditions - Negative, Neutral, and Positive. We had 24 items. The study is repeated measures (so everyone saw every condition).
 
 ```{r, message=FALSE}
-one_factor <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/one_factor.csv")
+tidied_factor_1_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/one_factor.csv")
 ```
 
 Let's plot our data.
 
 ```{r, message=FALSE}
 tidied_factor_1_data %>%
-  ggplot(aes(x = condition, y = gaze, colour = condition)) +
+  ggplot(aes(x = Condition, y = Gaze, colour = Condition)) +
   geom_violin(width = .5) +
   geom_jitter(width = .1, alpha = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
@@ -208,14 +206,14 @@ tidied_factor_1_data %>%
 If we build the following model, we end up with a `singular fit` warning suggesting we are trying to estimate too many parameters than our data supports.
 
 ```{r}
-factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
-                         (1 + condition | item), data = tidied_factor_1_data)
+factor_1_model <- lmer(Gaze ~ Condition + (1 + Condition | Subject) + 
+                         (1 + Condition | Item), data = tidied_factor_1_data)
 ```
 
 We can simplify the model by dropping random effect terms until the warning goes away and we have a set of parameter estimates we can be confident in.
 
 ```{r}
-factor_1_model <- lmer(gaze ~ condition + (1 | subject) + (1 | item), 
+factor_1_model <- lmer(Gaze ~ Condition + (1 | Subject) + (1 | Item), 
                        data = tidied_factor_1_data) 
 ```
 
@@ -241,9 +239,16 @@ library(emmeans)
 This is the same type of pairwise comparisons that we ran in the context of ANOVA. By default, Tukey correction is used for multiple comparisons.
 
 ```{r}
-emmeans(factor_1_model, pairwise ~ condition)
+emmeans(factor_1_model, pairwise ~ Condition)
 ```
+
 We can see with an appropriate correction for multiple comparisons (remember the familywise error rate?), that the *only* pairwise comparison that is significant is the Neutral vs Positive condition comparison.
+
+Let's check our model assumptions - remember, we want to see the residuals normally distributed. 
+
+```{r}
+check_model(factor_1_model)
+```
 
 
 ## Improve this Workshop
