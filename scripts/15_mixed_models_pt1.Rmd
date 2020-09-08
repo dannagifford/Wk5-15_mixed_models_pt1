@@ -174,7 +174,76 @@ library(performance)
 check_model(mixed_model_slopes)
 ```
 
+## One Factor With Three Levels
+
+In this next video, I'll show you how to build a mixed model for a design where you have one experimental factor with three levels.
+
+[video 3]
+
+Once you've watched the video, run the code below on your own machines. 
+
 ### One Factor Design With Three Levels
+
+Imagine we measured 24 subjects’ gaze duration while reading a sentence that appeared in one of three conditions - Negative, Neutral, and Positive. We had 24 items. The study is repeated measures (so everyone saw every condition).
+
+```{r, message=FALSE}
+one_factor <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/one_factor.csv")
+```
+
+Let's plot our data.
+
+```{r, message=FALSE}
+tidied_factor_1_data %>%
+  ggplot(aes(x = condition, y = gaze, colour = condition)) +
+  geom_violin(width = .5) +
+  geom_jitter(width = .1, alpha = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  theme_minimal() +
+  labs(x = "Condition",
+       y = "Gaze Duration (ms.)") +
+  guides(colour = FALSE) +
+  coord_flip()
+```
+
+If we build the following model, we end up with a `singular fit` warning suggesting we are trying to estimate too many parameters than our data supports.
+
+```{r}
+factor_1_model <- lmer(gaze ~ condition + (1 + condition | subject) + 
+                         (1 + condition | item), data = tidied_factor_1_data)
+```
+
+We can simplify the model by dropping random effect terms until the warning goes away and we have a set of parameter estimates we can be confident in.
+
+```{r}
+factor_1_model <- lmer(gaze ~ condition + (1 | subject) + (1 | item), 
+                       data = tidied_factor_1_data) 
+```
+
+We can check the model assumptions using the `{performance}` package.
+
+```{r}
+check_model(factor_1_model)
+```
+
+We can generate the summary of the model.
+
+```{r}
+summary(factor_1_model)
+```
+In this case, the Intercept corresponds to the Negative condition - this is because we are still using R dummy coding of contrasts and the reference level is the condition that occurs first alphabetically. The estimates for `conditionNeutral` and `conditionPositive` involve a comparison of these two levels of our factor with the reference level (i.e., the Negative condition). We see that both levels of our factor differ from this reference level.
+
+To determine whether *each* condition differs from each other condition, we can run pairwise comparisons using the `{emmeans}` package.
+
+```{r, message=FALSE}
+library(emmeans)
+```
+
+This is the same type of pairwise comparisons that we ran in the context of ANOVA. By default, Tukey correction is used for multiple comparisons.
+
+```{r}
+emmeans(factor_1_model, pairwise ~ condition)
+```
+We can see with an appropriate correction for multiple comparisons (remember the familywise error rate?), that the *only* pairwise comparison that is significant is the Neutral vs Positive condition comparison.
 
 
 ## Improve this Workshop
