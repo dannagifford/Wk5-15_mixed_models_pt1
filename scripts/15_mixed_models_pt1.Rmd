@@ -94,10 +94,6 @@ For a further gentle introduction to (G)LMMs I recommend you have a look at thes
 
 &nbsp;&nbsp;
 
-http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial1.pdf
-
-http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial2.pdf
-
 ## Mixed Models
 ### One Factor Design With Two Levels
 
@@ -219,7 +215,7 @@ factor_1_model <- lmer(Gaze ~ Condition + (1 | Subject) + (1 | Item),
 
 We can check the model assumptions using the `{performance}` package.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 check_model(factor_1_model)
 ```
 
@@ -246,10 +242,21 @@ We can see with an appropriate correction for multiple comparisons (remember the
 
 Let's check our model assumptions - remember, we want to see the residuals normally distributed. 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 check_model(factor_1_model)
 ```
 
+These residuals (and other diagnostics) look pretty good to me.
+
+# Your Challenge
+
+Within R, import the dataset “data1.csv” that can be found at:
+
+`https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/data1.csv`
+
+These data are from a reaction time experiment. Fifty participants had to respond to a word on the screen. Their task was to press a button on a button box only when they recognized the word (our DV is measured in milliseconds). The words were either Rare or Common. The design is repeated measures. We might expect Common words to be recognized more quickly than Common words. Run the appropriate LMM to determine whether this is indeed correct.
+
+You should find a mixed model where RTs to the `Rare` condition are about 200 ms. slower than RTs to the `Common` condition, and this is a significant difference - so our prediction is supported. Did you remember to check the model assumptions?
 
 ## Improve this Workshop
 
