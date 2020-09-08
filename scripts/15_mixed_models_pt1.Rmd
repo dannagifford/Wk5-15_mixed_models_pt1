@@ -23,6 +23,8 @@ In this workshop we will take our first look at (generalised) linear mixed model
 
 &nbsp;&nbsp;
 
+## Slides
+
 You can download the slides in .odp format by clicking [here](../slides/Mixed_Models_Part_1.odp) and in .pdf format by clicking on the image below. 
 
 &nbsp;&nbsp;
