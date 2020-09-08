@@ -34,7 +34,7 @@ We first read in the datafile we need.
 gender_height_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/gender_height_data.csv")
 ```
 
-Now let's plot our data. It's really important to do this before you build any models. You need to make sure the data look as you expect, and if you're trying to fit a linear model to your data it's important to be sure the relationship between your variables is roughly linear. Note, I've added a little bit of jitter to avoid overplotting.
+Now let's plot our data. It's really important to do this before you build any models. You need to make sure the data look as you expect, and if you're trying to fit a linear model to your data it's important to be sure the relationship between your variables is roughly linear. Note, I've added a little bit of horizontal jitter to the plot.
 
 ```{r}
 set.seed(1234)
@@ -98,13 +98,83 @@ http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial1.pdf
 
 http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial2.pdf
 
-## One Factor Design
+## Mixed Models
+### One Factor Design With Two Levels
 
 In this next video I'll show you how we might build a LMM to model data from a one factor design with three levels.
 
 [video 2]
 
 Once you've watched the video, run the code below on your own machines. 
+
+Imagine we are interested in how a person’s reaction time varies whether they’re responding to Large or Small target items. We observe the same 10 people each responding to 5 Large and 5 Small target items. We have 10 observations per person. These observations are not independent of each other as (which is an assumption of a linear model).
+
+Imagine also that we have different Target Items (e.g., 10 different items that were presented in either in Large or Small format). Each Target Item might have been a little different. One particular Target might just be responded to more quickly (regardless of what condition it was in) - in other words, the Target Items will also have different baselines.
+
+We'll be using the `{lme4}` package to build our models so let's load that first. Remember, if you haven't already installed `{lme4}` on your machine remember you need to first run in the Console `install.packages(lme4)`. We'll also load the `{lmerTest}` package to give us estimated *p*-values for our parameter estimates.
+
+```{r, message=FALSE}
+library(lme4)
+library(lmerTest)
+```
+
+Let's read in our data.
+
+```{r, message=FALSE}
+mixed_model_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/mixed_model_data.csv")
+```
+
+And generate some descriptives.
+
+```{r}
+mixed_model_data %>% 
+  group_by(condition) %>%
+  summarise(mean_rt = mean(rt), sd_rt = sd(rt))
+```
+
+We'll build our mixed model with `condition` as a fixed effect, and `subject` and `item` as random effects.
+
+```{r}
+mixed_model <- lmer(rt ~ condition + (1 | subject) + (1 | item), 
+                    data = mixed_model_data)
+summary(mixed_model)
+```
+
+We see from the above output that our Intercept parameter estimate is 854.140. This corresponds to the mean RT for the `Large` experimental condition. The estimate -49.780 corresponds to the difference in mean RT between the `Large` experimental condition and the `Small` experimental condition. In other words, people are 49ms faster in the `Small` condition relative to the `Large` condition. Note, in this example R is using dummy or treatment coding to code the levels of our condition. This is fine for a design with one factor, but becomes problematic when we have factorial designs involving interaction effects. For these kinds of designs we need to use *contrast* coding. We'll cover this later in more detail but it's worth noting at this point that the coding scheme you use can change how you interpret the parameter estimates. Many people get this wrong...
+
+We can use the Likelihood Ratio Test (LRT) to determine whether our model containing our fixed effect of `condition` is better than a model that contains only the random effects. Note, you can only use the LRT when one model is a subset or (or nested within) the other. Let's build a model containing only our random effects. We'll call it `mixed_model_null`.
+
+```{r}
+mixed_model_null <- lmer(rt ~ (1 | subject) + (1 | item), 
+                         data = mixed_model_data)
+```
+
+We can then compare the two models to each other via the LRT using `anova()`.
+
+```{r, message=FALSE}
+anova(mixed_model, mixed_model_null)
+```
+
+We can see the models differ from each other, with the `AIC`, `BIC`, and `deviance` measures all lower for the model with the fixed effect. This indicates that model with the fixed effect of `condition` explains more of the variability in our data than does the model with only random effects (and no fixed effect).
+
+Let's now build a model which models the slopes of our random effects. This means we are allowing the difference between the two levels of our fixed effect to differ in magnitude from one participant to the next, and from one item to the next.
+
+```{r}
+mixed_model_slopes <- lmer(rt ~ condition + (1 + condition | subject)
+                           + (1 + condition | item), data = mixed_model_data)
+```
+
+We can use the `{performance}` package to check our model assumptions. Note, we expect to see our residuals being normally distributed (as is the case with linear models).
+
+```{r, message=FALSE}
+library(performance)
+```
+
+```{r, message=FALSE, warning=FALSE}
+check_model(mixed_model_slopes)
+```
+
+### One Factor Design With Three Levels
 
 
 ## Improve this Workshop
