@@ -69,3 +69,6 @@ check_model(factorial_model_gamma)
 
 summary(factorial_model_gamma)
 
+
+
+
