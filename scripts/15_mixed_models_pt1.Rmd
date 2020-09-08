@@ -280,4 +280,4 @@ You should find a mixed model where RTs to the `Rare` condition are about 200 ms
 
 ## Improve this Workshop
 
-If you spot any issues/errors in this workshop, you can raise an issue or create a pull request for [this repo](https://github.com/ajstewartlang/03_data_wrangling). 
+If you spot any issues/errors in this workshop, you can raise an issue or create a pull request for [this repo](https://github.com/ajstewartlang/15_mixed_models_pt1). 
