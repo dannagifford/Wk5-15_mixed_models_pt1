@@ -46,10 +46,14 @@ Once you've watched the video above, run the code below on your own machines.
 library(tidyverse)
 ```
 
-We first read in the datafile we need.
+We first read in the datafile we need. We are also going to use `transmute()` to turn our `subject` and `gender` columns into factors.
 
 ```{r, message=FALSE}
 gender_height_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/gender_height_data.csv")
+
+gender_height_data <- gender_height_data %>%
+  mutate(subject = factor(subject),
+            gender = factor(gender))
 ```
 
 Now let's plot our data. It's really important to do this before you build any models. You need to make sure the data look as you expect, and if you're trying to fit a linear model to your data it's important to be sure the relationship between your variables is roughly linear. Note, I've added a little bit of horizontal jitter to the plot.
@@ -136,15 +140,20 @@ library(lme4)
 library(lmerTest)
 ```
 
-Let's read in our data.
+Let's read in our data and turn our `subject`, `item`, and `condition` columns into factors.
 
 ```{r, message=FALSE}
 mixed_model_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/mixed_model_data.csv")
+
+mixed_model_data <- mixed_model_data %>%
+  mutate(subject = factor(subject),
+            item = factor(item),
+            condition = factor(condition))
 ```
 
 And generate some descriptives.
 
-```{r}
+```{r, message=FALSE}
 mixed_model_data %>% 
   group_by(condition) %>%
   summarise(mean_rt = mean(rt), sd_rt = sd(rt))
@@ -204,6 +213,11 @@ Imagine we measured 24 subjects’ gaze duration while reading a sentence that a
 
 ```{r, message=FALSE}
 tidied_factor_1_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/one_factor.csv")
+
+tidied_factor_1_data <- tidied_factor_1_data %>%
+  mutate(Subject = factor(Subject),
+         Item = factor(Item),
+         Condition = factor(Condition))
 ```
 
 Let's plot our data.
