@@ -50,7 +50,7 @@ Once you've watched the video above, run the code below on your own machines.
 library(tidyverse)
 ```
 
-We first read in the datafile we need. We are also going to use `transmute()` to turn our `subject` and `gender` columns into factors.
+We first read in the datafile we need. We are also going to use `mutate()` to turn our `subject` and `gender` columns into factors.
 
 ```{r, message=FALSE}
 gender_height_data <- read_csv("https://raw.githubusercontent.com/ajstewartlang/15_mixed_models_pt1/master/data/gender_height_data.csv")
@@ -248,12 +248,14 @@ factor_1_model <- lmer(Gaze ~ Condition + (1 | Subject) + (1 | Item),
                        data = tidied_factor_1_data) 
 ```
 
-We can check the model assumptions using the `{performance}` package.
+We can check the model assumptions using the `{performance}` package. Remember, we want to see the residuals (roughly) normally distributed.
 
 ```{r, warning=FALSE, message=FALSE}
 library(performance)
 check_model(factor_1_model)
 ```
+
+These look pretty good to me.
 
 We can generate the summary of the model.
 
@@ -275,14 +277,6 @@ emmeans(factor_1_model, pairwise ~ Condition)
 ```
 
 We can see with an appropriate correction for multiple comparisons (remember the familywise error rate?), that the *only* pairwise comparison that is significant is the Neutral vs Positive condition comparison.
-
-Let's check our model assumptions - remember, we want to see the residuals normally distributed. 
-
-```{r, warning=FALSE, message=FALSE}
-check_model(factor_1_model)
-```
-
-These residuals (and other diagnostics) look pretty good to me.
 
 # Your Challenge
 
