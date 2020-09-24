@@ -21,7 +21,7 @@ In this workshop we will take our first look at (generalised) linear mixed model
 
 &nbsp;&nbsp;
 
-<iframe width="560" height="315" src="https://youtube.com/embed/gELAuRHCEbw" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtube.com/embed/6hirHdUIF_o" frameborder="0" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
