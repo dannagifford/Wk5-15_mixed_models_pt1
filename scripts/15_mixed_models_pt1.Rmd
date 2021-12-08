@@ -21,7 +21,7 @@ In this workshop we will take our first look at (generalised) linear mixed model
 
 &nbsp;&nbsp;
 
-<iframe width="560" height="315" src="https://youtube.com/embed/6hirHdUIF_o" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtube.com/embed/6hirHdUIF_o" frameborder="0" data-external="1" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
@@ -200,7 +200,7 @@ In this next video, I'll show you how to build a mixed model for a design where 
 
 &nbsp;&nbsp;
 
-<iframe width="560" height="315" src="https://youtube.com/embed/Y8hW9gdW8i0" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtube.com/embed/Y8hW9gdW8i0" frameborder="0" data-external="1" allowfullscreen></iframe>
 
 &nbsp;&nbsp;
 
@@ -276,7 +276,7 @@ This is the same type of pairwise comparisons that we ran in the context of ANOV
 emmeans(factor_1_model, pairwise ~ Condition)
 ```
 
-We can see with an appropriate correction for multiple comparisons (remember the familywise error rate?), that the *only* pairwise comparison that is significant is the Neutral vs Positive condition comparison.
+We can see with an appropriate correction for multiple comparisons (remember the familywise error rate?), that the *only* pairwise comparison that is significant is the Negative vs Positive condition comparison.
 
 # Your Challenge
 
