@@ -114,7 +114,7 @@ For a further gentle introduction to (G)LMMs I recommend you have a look at thes
 
 <center>
 
-[![Link to tutorial 1](../images/tutorial_1.png){width=45%}](http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial1.pdf) [![Link to tutorial 2](../images/tutorial_2.png){width=45%}](http://www.bodowinter.com/uploads/1/2/9/3/129362560/bw_lme_tutorial2.pdf)
+[![Link to tutorial 1](../images/tutorial_1.png){width=45%}](https://bodowinter.com/tutorial/bw_LME_tutorial1.pdf) [![Link to tutorial 2](../images/tutorial_2.png){width=45%}](https://bodowinter.com/tutorial/bw_LME_tutorial2.pdf)
 
 </center>
 
@@ -230,7 +230,7 @@ tidied_factor_1_data %>%
   theme_minimal() +
   labs(x = "Condition",
        y = "Gaze Duration (ms.)") +
-  guides(colour = FALSE) +
+  guides(colour = "none") +
   coord_flip()
 ```
 
